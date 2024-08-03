@@ -29,9 +29,9 @@ def goldwyn_beta(eps, k2, rs, re, n):
     return spec.iv(n, k2 * re) / (denom * krs)
 
 
-def goldwyn_phi(eps, k, rs, re, reval, n):  # Note Goldwyn alpha is zero for eval pt. outide cylinder
-    phi = (goldwyn_beta(eps, k, rs, re, n) * spec.kn(n, k * reval))
-    return phi
+def goldwyn_psi(eps, k, rs, re, reval, n):  # Note Goldwyn alpha is zero for eval pt. outside cylinder
+    psi = (goldwyn_beta(eps, k, rs, re, n) * spec.kn(n, k * reval))
+    return psi
 
 
 def integ_func(x, m_max, pratio, rad, reval, z, theta, relec):  # This is the Bessel function along z axis
@@ -44,7 +44,7 @@ def integ_func(x, m_max, pratio, rad, reval, z, theta, relec):  # This is the Be
         else:
             gamma = 2.0
 
-        increments[idx] = gamma * np.cos(idx * theta) * goldwyn_phi(pratio, x, rad, relec, reval, idx)
+        increments[idx] = gamma * np.cos(idx * theta) * goldwyn_psi(pratio, x, rad, relec, reval, idx)
         sum_contents += increments[idx]
         rel_incrs[idx] = np.abs(increments[idx]) / sum_contents
         # print('m = ', idx, ' ; increment = ', increments[idx], ' ; rel_incr = ', rel_incrs[idx])
@@ -56,14 +56,14 @@ def integ_func(x, m_max, pratio, rad, reval, z, theta, relec):  # This is the Be
 
 # Main parameters to vary
 radius = 1.0  # cylinder radius
-res_int = 70.0  # internal resistivity
-res_ext = 250.0  # external resistivityß
+res_int = 250.0  # internal resistivity in ohm-cm
+res_ext = 250.0  # external resistivity in ohm-cm
 vtable_dir = 'v_tables/'
 
-## TODO Autmatically make the filename, to ensure that it matches the parameters
-## TODO Put the voltage tables in their own directory. [optionally]
-date = '24June2024'
-resol = '_MedResolution_'
+# TODO Autmatically make the filename, to ensure that it matches the parameters
+# TODO Put the voltage tables in their own directory. [optionally]
+date = '02Aug2024'
+resol = '_MedResolution_M20_'
 rext_text = 'Rext' + str(round(res_ext))
 r_int_text = '_Rint' + str(round(res_int)) + '.dat'
 output_filename = vtable_dir + date + resol + rext_text + r_int_text
@@ -92,8 +92,15 @@ fp = {'model': 'cylinder_3d', 'fieldtype': 'Voltage_Activation', 'evaltype': 'SG
       #           8.5, 9.0, 9.5, 10.0, 15, 20.0, 25.0, 30.0, 35.0, 40),
       # Very low resolution for debugging
       # 'zEval': (0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0),
-      'mMax': 47, 'intStart': 1e-12, 'intEnd': 500.0, 'reval': 1.3,
+      # Only position 0.0 low resolution for debugging
+      # 'zEval': (0.0, 0.1),
+
+      # from ,most of py thon study  'mMax': 47, 'intStart': 1e-12, 'intEnd': 500.0, 'reval': 1.3,
+
+      # below from orig Matlab
+      'mMax': 20, 'intStart': 0.0, 'intEnd': 100.0, 'reval': 1.3,
       'ITOL': 1e-6, 'runDate': 'rundate', 'runOutFile': 'savefile', 'run_duration': 0.0}
+
 
 now = datetime.now()
 date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
@@ -108,14 +115,14 @@ n_ypos = 3  # # of values to calculate across the y dimension for the 2nd spatia
 
 relec_range = fp['relec']  # electrode radial positions
 n_relec = len(relec_range)
-voltageVals = np. zeros((n_relec, n_ypos, nZ))
+voltageVals = np.zeros((n_relec, n_ypos, nZ))
 activationVals = np.zeros((n_relec, nZ))
 if_plot = False
 
 pr.enable()  # Start the profiler
 
 n_yeval = n_ypos // 2  # floor division
-y_inc = 0.001  # 10 microns
+y_inc = 0.001  # 1 micron
 yVals = np.arange(-n_yeval * y_inc, n_yeval * (y_inc * 1.01), y_inc)
 transVoltage = np.empty(n_ypos)
 
@@ -135,7 +142,8 @@ for i, rElec in enumerate(relec_range):
             r_prime = np.sqrt((np.power(y_val, 2)) + (fp['reval'] ** 2))  # distance of eval pt. from center of cylinder
             [itemp, error] = integ.quad(integ_func, fp['intStart'], fp['intEnd'], epsabs=fp['ITOL'], limit=1000,
                                         args=(fp['mMax'], resRatio, fp['cylRadius'], r_prime, thisZ, thisTheta, rElec))
-            tempV = itemp / (2 * (np.pi ** 2))  # From Goldwyn eqn. 11
+            tempV = -itemp*res_int*10 / (2 * (np.pi ** 2))  # From Goldwyn eqn. 11.
+            # Added negative sign to make the values positive and multiply by 10 to convert to ohm-mm
             voltageVals[i, j, m] = tempV
             voltageVals[i, n_ypos - (j + 1), m] = tempV  # place same value in mirror-symmetric position
             # Extra variable to make derivative calculation easy
