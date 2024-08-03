@@ -60,8 +60,6 @@ res_int = 250.0  # internal resistivity in ohm-cm
 res_ext = 250.0  # external resistivity in ohm-cm
 vtable_dir = 'v_tables/'
 
-# TODO Autmatically make the filename, to ensure that it matches the parameters
-# TODO Put the voltage tables in their own directory. [optionally]
 date = '02Aug2024'
 resol = '_MedResolution_M20_'
 rext_text = 'Rext' + str(round(res_ext))
