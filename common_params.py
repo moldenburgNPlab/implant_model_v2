@@ -7,7 +7,7 @@ NELEC = 16
 # ELEC_BASALPOS = 26.25  # in mm ** removed this 20 May 2024 to make sure electrode array is centered in neurons
 
 # Neural activation parameters
-R_EXT = 70.0   # ohm-cm
+R_EXT = 250.0   # ohm-cm
 RE_TEXT = 'RE' + str(round(R_EXT))
 R_INT = 70.0  # ohm-cm
 RI_TEXT = 'RI' + str(round(R_INT))
@@ -87,11 +87,11 @@ global scenarios
 # scenarios = ['S43']
 # all subjects with CT data
 # scenarios = ['RampRposSGradual80', 'S22']
-scenarios = ['Gradual80R00', 'RampRposS80', 'RampRposSGradual80', 'S42', 'S43']
+# scenarios = ['Gradual80R00', 'RampRposS80', 'RampRposSGradual80', 'S42', 'S43', 'S29', 'S56']
 # scenarios = ['RampRposSGradual80']
 
-# scenarios = ['Gradual80R00', 'RampRposS80', 'RampRposSGradual80', 'S22', 'S27', 'S29', 'S38', 'S40', 'S41', 'S42',
-#              'S43', 'S46', 'S47', 'S49R', 'S50', 'S52', 'S53', 'S54', 'S55', 'S56', 'S57']
+scenarios = ['Gradual80R00', 'RampRposS80', 'RampRposSGradual80', 'S22', 'S27', 'S29', 'S38', 'S40', 'S41', 'S42',
+             'S43', 'S46', 'S47', 'S49R', 'S50', 'S52', 'S53', 'S54', 'S55', 'S56', 'S57']
 # scenarios = ['RampRposSGradual80', 'S22', 'S42',]
 
 # scenarios = ['A014L']
@@ -106,25 +106,31 @@ INVOUTPUTDIR = INV_OUT_PRFIX + new_dir_suffix
 vtable_dir = 'v_tables/'
 
 if RE_TEXT == 'RE70':
-    FIELDTABLE = '16May2024_MedResolution_Rext70_nonans.dat'
+    FIELDTABLE = '03Aug2024_MedResolution_M20_Rext70_Rint70.dat'
 elif RE_TEXT == 'RE125':
     FIELDTABLE = '3June2024_MedResolution_Rext125_nonans.dat'
 elif RE_TEXT == 'RE250':
     if RI_TEXT == 'RI70':
-        FIELDTABLE = '18May2024_MedResolution_Rext250_nonans.dat'
+        FIELDTABLE = '02Aug2024_MedResolution_Rext250_Rint70.dat'
     elif RI_TEXT == 'RI250':
         FIELDTABLE = '16June2024_MedResolution_Rext250_Rint250_nonans.dat'
 elif RE_TEXT == 'RE375':
     FIELDTABLE = '18May2024_MedResolution_Rext375.dat'
 elif RE_TEXT == 'RE500':
-    FIELDTABLE = '3June2024_MedResolution_Rext500.dat'
+    FIELDTABLE = '03Aug2024_MedResolution_Rext500_Rint70.dat'
 elif RE_TEXT == 'RE750':
     FIELDTABLE = '18Jan2024_MedResolution_Rext750_nonans.dat'
 elif RE_TEXT == 'RE1000':
-    FIELDTABLE = '3June2024_MedResolution_Rext1000_nonans.dat'
+    FIELDTABLE = '03Aug2024_MedResolution_Rext1000_Rint70.dat'
 elif RE_TEXT == 'RE125O':
     FIELDTABLE = '28Dec2023_MedResolution_Rext1250.dat'
+elif RE_TEXT == 'RE2000':
+    FIELDTABLE = '04Aug2024_MedResolution_Rext2000_Rint70.dat'
 elif RE_TEXT == 'RE2500':
     FIELDTABLE = '7Dec2023_MedResolution_Rext2500_nonans.dat'
+elif RE_TEXT == 'RE4000':
+    FIELDTABLE = '04Aug2024_MedResolution_Rext4000_Rint70.dat'
+elif RE_TEXT == 'RE8000':
+    FIELDTABLE = '04Aug2024_MedResolution_Rext8000_Rint70.dat'
 
 FIELDTABLE = vtable_dir + FIELDTABLE
