@@ -28,7 +28,7 @@ def read_inv_summary(res, na_scen):
     # INV_OUT_PRFIX = 'INV_OUTPUT/'
     # R_TEXT = 'R' + str(round(res))
     # INVOUTPUTDIR = INV_OUT_PRFIX + R_TEXT + ACTR_TEXT + STD_TEXT + TARG_TEXT
-    new_dir_suffix = 'R%d' % res + '_' + 'std_%.1f' % ACT_STDREL + '_thr_%d' % THRTARG + '/'
+    new_dir_suffix = 'RE%d' % res + '/R%d' % res + '_' + 'std_%.1f' % ACT_STDREL + '_thr_%d' % THRTARG + '/'
     INVOUTPUTDIR = INV_OUT_PRFIX + new_dir_suffix
 
     summary_file_name = INVOUTPUTDIR + 'summary_inverse_fit_results.npy'
@@ -192,14 +192,18 @@ def fig9_summary():
             maxx = np.max(ct_dist)
             axs1[2, 0].plot((minx, maxx), (minx*slope + intercept, maxx*slope + intercept), '-', c=fig9_colors[idx, :])  # plot line
 
-
+    all_mean = 0.0
     for idx, scen in enumerate(scenarios[n_artscen:]):  # Panel F
+        print('panel F: scen: ', scen)
         ct_dist = 1 - rpos_vals_1[idx]
         fit_dist = 1 - rpos_fit_vals_1[idx]
         retval = subject_data.subj_thr_data(scen)
         espace = retval[3]
         if espace == 0.85 or espace == 1.1:
             axs1[2, 1].plot(ct_dist, fit_dist, '.', color=fig9_colors[idx, :])
+            err_mean = np.mean(np.abs(np.subtract(ct_dist, fit_dist)))
+            all_mean += err_mean
+            print('err mean: ', err_mean)
             axs1[2, 1].set_xlabel('Measured electrode distance (mm)')
             axs1[2, 1].set_ylabel('Fit electrode distance (mm)')
             axs1[2, 1].spines['top'].set_visible(False)
@@ -210,6 +214,8 @@ def fig9_summary():
             maxx = np.max(ct_dist)
             axs1[2, 1].plot((minx, maxx), (minx*slope + intercept, maxx*slope + intercept), '-', c=fig9_colors[idx, :])  # plot line
 
+    all_mean = all_mean / 18
+    print('grand mean: ', all_mean)
 
     # # Best fit line to the data
     coeffs = np.polyfit(1-rpos_vals_0.flatten(), 1-rpos_fit_vals_0.flatten(), 1)
@@ -259,6 +265,30 @@ def fig9_summary():
     # sns.swarmplot(dist_corr_0[not_signif], color='black', marker='$\circ$', s=6)
     plt.show()
 
+    fig, axs = plt.subplots(1, 1, sharex=True, sharey=True)
+    for idx, scen in enumerate(scenarios[n_artscen:]):  # Panel F
+        print('panel F: scen: ', scen)
+        ct_dist = 1 - rpos_vals_1[idx]
+        fit_dist = 1 - rpos_fit_vals_1[idx]
+        fit_err = np.subtract(fit_dist, ct_dist)
+        axs.plot(fit_dist, fit_err, '.', color=fig9_colors[idx, :])
+        axs.set_xlabel('Fit electrode distance (mm)')
+        axs.set_ylabel('Fit errer (mm)')
+        axs.spines['top'].set_visible(False)
+        axs.spines['right'].set_visible(False)
+        axs.set_ylim(-2.0, 2.0)
+        # [slope, intercept] = np.polyfit(ct_dist, fit_dist, 1)
+        # minx = np.min(ct_dist)
+        # maxx = np.max(ct_dist)
+        # axs1[2, 1].plot((minx, maxx), (minx*slope + intercept, maxx*slope + intercept), '-', c=fig9_colors[idx, :])  # plot line
+
+
+    # # Best fit line to the data
+    coeffs = np.polyfit(1-rpos_fit_vals_1.flatten(), np.subtract(1-rpos_fit_vals_1.flatten(), 1-rpos_vals_1.flatten()), 1)
+    start_pt = coeffs[1]
+    end_pt = coeffs[1] + (coeffs[0]*2.0)
+    axs.plot([0, 2], [start_pt, end_pt], color='black')
+    plt.show()
 
 
 

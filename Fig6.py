@@ -15,7 +15,7 @@ def fig_scenario_inverse_results():
     plt.rcParams['axes.linewidth'] = 2
 
     # Directory names
-    new_dir_suffix = 'R%d' % R_EXT + '_' + 'std_%.1f' % ACT_STDREL + '_thr_%d' % THRTARG
+    new_dir_suffix = 'RE%d' % R_EXT + '/' + 'R%d' % R_EXT + '_' + 'std_%.1f' % ACT_STDREL + '_thr_%d' % THRTARG + '/'
     # offset = len(cp.FWD_OUT_PRFIX)
     INV_OUT_PRFIX = 'INV_OUTPUT/'
     INVOUTPUTDIR = INV_OUT_PRFIX + new_dir_suffix
@@ -55,7 +55,7 @@ def fig_scenario_inverse_results():
         ax.spines.top.set_visible(False)
         xlim = ax.get_xlim()
         ax.set_xticks([2, 4, 6, 8, 10, 12, 14, 16])
-        ax.set_ylim(50, 92)
+        ax.set_ylim(-30, 30)
         if i == 0:
             ax.set_ylabel('Threshold (dB re 1 $\mu$A)', font='Arial')
 
@@ -102,6 +102,8 @@ def fig_scenario_inverse_results():
         print("scenario: ", scenario, " max mp, tp and dist and surv errors: ",
               max_mp_error, max_tp_error, max_dist_error, max_density_error)
 
+    figname = "fig6_scenarios.eps"
+    fig_consol.savefig(figname, format='eps')
     figname = "fig6_scenarios.pdf"
     fig_consol.savefig(figname, format='pdf')
     figname = "fig6_scenarios.png"

@@ -6,8 +6,8 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 
-table1 = 'v_tables/16June2024_MedResolution_Rext250_Rint250_nonans.dat'
-table2 = 'v_tables/18May2024_MedResolution_Rext70_nonans.dat'
+table1 = 'v_tables/02Aug2024_MedResolution_Matlab_Match_M20_Rext70_Rint70.dat'
+table2 = 'v_tables/02Aug2024_MedResolution_Matlab_Match_M20_Rext250_Rint250.dat'
 
 with open(table1, 'rb') as combined_data:
     data = pickle.load(combined_data)
@@ -25,7 +25,7 @@ fp2 = data[0]
 v_vals2 = data[1]
 act_vals2 = data[2]
 
-ew = 2  # edge width
+ew = 1  # edge width
 act_vals_diff = np.subtract(act_vals2, act_vals1)
 act_vals_diff_non_edge = np.subtract(act_vals2[ew:-ew, ew:-ew], act_vals1[ew:-ew, ew:-ew])
 act_vals_reldiff = np.divide(act_vals_diff, act_vals2)

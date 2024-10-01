@@ -104,9 +104,9 @@ def fig_2D_contour():
     # all_min = np.min([t_min, m_min])  # if we want to do this automatically
     # all_max = np.max([t_max, m_max])
     # rounding manually for figure
-    all_min = 30.0
-    all_max = 90.0
-    n_levels = 6
+    all_min = -40.0
+    all_max = 30.0
+    n_levels = 7
     labels = ['P1', 'P2', 'P3', 'P4']
 
     fig, axs = plt.subplots(2, 2, figsize=(8, 8))
@@ -167,7 +167,8 @@ def fig_2D_contour():
         axs[0, 1].set_xticks([0.4, 0.8, 1.2, 1.6])
     else:
         cs3 = axs[0, 0].contour(1 - rpos_vals, surv_vals, mono_thr,
-                                np.arange(all_min, all_max, (all_max - all_min) / n_levels), colors='k')
+                                np.arange(all_min, all_max, (all_max - all_min) / n_levels),
+                                linestyles = 'solid', colors='k')
 
         # This custom formatter removes trailing zeros, e.g. "1.0" becomes "1", and
         # then adds a percent sign.
@@ -177,7 +178,7 @@ def fig_2D_contour():
                 s = f"{x:.0f}"
             return rf"{s} dB" if plt.rcParams["text.usetex"] else f"{s} dB"
 
-        manual_locations = [(0, 0.9), (0.3, 0.6), (0.8, 0.3), (1.0, 0.2)]
+        manual_locations = [(0.3, 0.6), (1.0, 0.5), (1.0, 0.2), (1.7, 0.05)]
         axs[0, 0].clabel(cs3, cs3.levels, inline=True, fmt=fmt, fontsize=10, manual=manual_locations)
         low_rpos_val = -0.5
         high_rpos_val = 0.5
@@ -187,11 +188,11 @@ def fig_2D_contour():
         axs[0, 0].set_ylabel('Fractional neuronal density')
         axs[0, 0].set_title('Monopolar', fontsize=12)
         lab_shift = 0.025
-        axs[0, 0].text(1 - high_rpos_val - 0.15, high_surv_val - 0.06, labels[0], horizontalalignment='left',
+        axs[0, 0].text(1 - high_rpos_val + lab_shift, high_surv_val, labels[0], horizontalalignment='left',
                        verticalalignment='bottom', fontweight='bold')
-        axs[0, 0].text(1 - low_rpos_val + lab_shift, high_surv_val - 0.06, labels[1], horizontalalignment='left',
+        axs[0, 0].text(1 - low_rpos_val + lab_shift, high_surv_val, labels[1], horizontalalignment='left',
                        verticalalignment='bottom', fontweight='bold')
-        axs[0, 0].text(1 - high_rpos_val - 0.15, low_surv_val, labels[2], horizontalalignment='left',
+        axs[0, 0].text(1 - high_rpos_val + lab_shift, low_surv_val, labels[2], horizontalalignment='left',
                        verticalalignment='bottom', fontweight='bold')
         axs[0, 0].text(1 - low_rpos_val + lab_shift, low_surv_val, labels[3], horizontalalignment='left',
                        verticalalignment='bottom', fontweight='bold')
@@ -203,22 +204,22 @@ def fig_2D_contour():
         axs[0, 0].plot([1 - high_rpos_val, 1 - high_rpos_val], [np.min(surv_vals), np.max(surv_vals)], color='black')
         axs[0, 0].set_xticks([0.4, 0.8, 1.2, 1.6])
 
-        all_min = 30.0
-        all_max = 90.0
-        n_levels = 6
+        all_min = -40.0
+        all_max = 30.0
+        n_levels = 7
         cs4 = axs[0, 1].contour(1 - rpos_vals, surv_vals, tripol_thr,
                                 np.arange(all_min, all_max, (all_max - all_min) / n_levels),
-                                extend='both', colors='k')
-        manual_locations = [(0, 0.9), (0.3, 0.3), (0.7, 0.7), (1.2, 0.2), (1.2, 0.5), (1.3, 0.02)]
+                                extend='both', linestyles = 'solid', colors='k')
+        manual_locations = [(0.3, 0.6), (0.35, 0.3), (0.9, 0.6), (0.9, 0.2), (1.7, 0.1)]
 
         axs[0, 1].clabel(cs4, cs4.levels, inline=True, fmt=fmt, fontsize=10, manual=manual_locations)
         axs[0, 1].set_title('Tripolar', fontsize=12)
         axs[0, 1].set_xlabel('Electrode distance (mm)')
-        axs[0, 1].text(1 - high_rpos_val + 0.03, high_surv_val - 0.06, labels[0], horizontalalignment='left',
+        axs[0, 1].text(1 - high_rpos_val - 0.15, high_surv_val - 0.06, labels[0], horizontalalignment='left',
                        verticalalignment='bottom', fontweight='bold')
-        axs[0, 1].text(1 - low_rpos_val + lab_shift, high_surv_val - 0.06, labels[1], horizontalalignment='left',
+        axs[0, 1].text(1 - low_rpos_val - 0.15, high_surv_val - 0.06, labels[1], horizontalalignment='left',
                        verticalalignment='bottom', fontweight='bold')
-        axs[0, 1].text(1 - high_rpos_val + 0.06, low_surv_val, labels[2], horizontalalignment='left',
+        axs[0, 1].text(1 - high_rpos_val + lab_shift, low_surv_val, labels[2], horizontalalignment='left',
                        verticalalignment='bottom', fontweight='bold')
         axs[0, 1].text(1 - low_rpos_val + lab_shift, low_surv_val, labels[3], horizontalalignment='left',
                        verticalalignment='bottom', fontweight='bold')
@@ -243,7 +244,7 @@ def fig_2D_contour():
     axs[1, 0].axes.set_xlabel('Electrode distance (mm)')
     axs[1, 0].axes.set_ylabel('Threshold (dB)')
     axs[1, 0].axes.set_xlim([0.1, 1.9])
-    axs[1, 0].axes.set_ylim([30, 80])
+    axs[1, 0].axes.set_ylim([-30, 30])
     axs[1, 0].set_xticks([0.4, 0.8, 1.2, 1.6])
 
     axs[1, 1].plot(surv_vals, mono_thr[:, high_rpos_idx], color='black', linestyle='solid')
@@ -252,10 +253,11 @@ def fig_2D_contour():
     axs[1, 1].plot(surv_vals, tripol_thr[:, low_rpos_idx], color='gray', linestyle='dashed')
     axs[1, 1].axes.set_xlabel('Fractional neuronal density')
     axs[1, 1].axes.set_xlim([0.1, 0.9])
-    axs[1, 1].axes.set_ylim([30, 80])
+    axs[1, 1].axes.set_ylim([-30, 30])
 
+    filename = 'Fig4_2D_contour' + es_text + '.eps'
+    plt.savefig(filename, format='eps')
     filename = 'Fig4_2D_contour' + es_text + '.pdf'
-    # plt.savefig('Fig4_2D_contour.eps', format='eps')
     plt.savefig(filename, format='pdf')
 
     figrows = 2
@@ -319,6 +321,7 @@ def fig_2D_contour():
         the_ax.set_xlim([0, 1.9])
         the_ax.text(0.1, 0.8, labels[i], fontsize=16)
 
+    plt.savefig('Fig5_contour_examples.eps', format='eps')
     plt.savefig('Fig5_contour_examples.pdf', format='pdf')
 
     if map_unique_solutions:
@@ -378,6 +381,8 @@ def fig_2D_contour():
         fig_nsols, ax_nsols = plt.subplots()
         ax_nsols.contour(rpos_vals, surv_vals, n_sols, [1, 2])
 
+    figname = 'Fig5_contour_examples.eps'
+    plt.savefig(figname, format='eps', pad_inches=0.1)
     figname = 'Fig5_contour_examples.pdf'
     plt.savefig(figname, format='pdf', pad_inches=0.1)
     figname = 'Fig5_contour_examples.png'

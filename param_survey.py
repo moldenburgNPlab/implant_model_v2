@@ -10,8 +10,8 @@ import os
 
 # params to vary
 # external resistivity, stdrel, number of active neurons, minimization approach
-## planning resistivities of 70, 125, 250, 500, 1000
-res_ext = 250.0  # DOUBLE CHECK this in COMMON PARAMS. should double-check that this matches the field table being used
+# planning resistivities of 70, 125, 250, 500, 1000
+res_ext = 1000.0  # DOUBLE CHECK this in COMMON PARAMS. should double-check that this matches the field table being used
 # specify some fixed params
 
 # start by cycling through stdrel, # of active neurons
@@ -32,13 +32,12 @@ tp_err_summ = np.zeros((n_std, n_thr))
 dist_err_summ = np.zeros((n_std, n_thr))
 dist_corr_sum = np.zeros((n_std, n_thr))
 n_corr_sig = np.zeros((n_std, n_thr))
-
+param_file = 'surv_params.txt'  # param file to pass to the other model scripts
 
 for stdrel in stdrel_vals:  # loop on stdrel values
     espace = 1.1  # set espace to get 2D fwd model
     for thrtarg in thrtarg_vals:  # loop on target #
         # save file with key params
-        param_file = 'surv_params.txt'  # param file to pass to the other model scripts
         tempdata = np.zeros(4)  # 4 values
         tempdata[0] = res_ext
         tempdata[1] = stdrel
@@ -71,7 +70,6 @@ for stdrel in stdrel_vals:  # loop on stdrel values
 
         espace = 0.85
         # save file with key params
-        param_file = 'surv_params.txt'
         tempdata = np.zeros(4)  # 3 values
         tempdata[0] = res_ext
         tempdata[1] = stdrel
@@ -83,7 +81,6 @@ for stdrel in stdrel_vals:  # loop on stdrel values
                 data_writer.writerow([tempdata[i]])
         data_file.close()
         fwd2D.fwd_model_2D('survey')
-
 
         espace = 1.1  # Set espace back to 1.1 in surv_params.txt
         # save file with key params
@@ -128,13 +125,13 @@ for stdrel in stdrel_vals:  # loop on stdrel values
         INV_OUT_PRFIX = 'INV_OUTPUT/'
         INVOUTPUTDIR = INV_OUT_PRFIX + new_dir_suffix
 
-        #new_fwd_dir = FWDOUTPUTDIR + new_dir_suffix
+        # new_fwd_dir = FWDOUTPUTDIR + new_dir_suffix
         os.rename(cp.FWDOUTPUTDIR, FWDOUTPUTDIR)
         # offset = len(cp.INV_OUT_PRFIX)
-        #new_inv_dir = INVOUTPUTDIR + new_dir_suffix
+        # new_inv_dir = INVOUTPUTDIR + new_dir_suffix
         os.rename(cp.INVOUTPUTDIR, INVOUTPUTDIR)
 
-## clean up by removing param_file
+# clean up by removing param_file
 os.remove(param_file)
 
 # Run a separate script to calculate mean & std for each subject across parameters

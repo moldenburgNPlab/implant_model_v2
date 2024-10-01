@@ -35,9 +35,10 @@ def fig3_neuron_activation():
 
     # can be useful for some debugging or draft figures
     hires = '_hi_res'
-    descrip = "surv_" + str(np.min(surv_vals)) + "_" + str(np.max(surv_vals)) + "_rpos_" + \
-              str(np.min(rpos_vals)) + "_" + str(np.max(rpos_vals)) + hires
-
+    # descrip = "surv_" + str(np.min(surv_vals)) + "_" + str(np.max(surv_vals)) + "_rpos_" + \
+    #           str(np.min(rpos_vals)) + "_" + str(np.max(rpos_vals)) + hires
+    descrip = 'surv_%.2f' % np.min(surv_vals) + '_%.2f' % np.max(surv_vals) + "_rpos_%.2f" % \
+              np.min(rpos_vals) + '_%.2f' % np.max(rpos_vals) + hires
 
     params_file = FWDOUTPUTDIR + '/simParams' + descrip + es_text + '.pickle'
     # sp = np.load(params_file + '.npy', allow_pickle=True)
@@ -135,10 +136,9 @@ def fig3_neuron_activation():
                         rposidxs[row]], ' and ', tripol_thr[survidxs[col], rposidxs[row]])
 
     # Save figure
-    fig_filename = 'fig3_neuronact.pdf'
-    plt.savefig(fig_filename, format='pdf')
-    fig_filename = 'fig3_neuronact.png'
-    plt.savefig(fig_filename, format='png')
+    plt.savefig('fig3_neuronact.jpg', format='jpg')
+    plt.savefig('fig3_neuronact.eps', format='eps')
+    plt.savefig('fig3_neuronact.pdf', format='pdf')
 
     plt.show()
 
