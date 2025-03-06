@@ -57,7 +57,7 @@ def integ_func(x, m_max, pratio, rad, reval, z, theta, relec):  # This is the Be
 # Main parameters to vary
 radius = 1.0  # cylinder radius
 res_int = 70.0  # internal resistivity in ohm-cm
-res_ext = 6500.0  # external resistivity in ohm-cm
+res_ext = 250.0  # external resistivity in ohm-cm
 vtable_dir = 'v_tables/'
 
 date = '07Aug2024'
