@@ -11,7 +11,7 @@ def fig3_neuron_activation():
 
     mpl.rcParams['font.family'] = 'Arial'
 
-    espace = 1.1
+    espace = 0.85
     if espace == 0.85:
         e_txt = '085'
     elif espace == 1.1:
@@ -22,7 +22,7 @@ def fig3_neuron_activation():
 
     font = findfont(FontProperties(family=['Arial']))
     # Rename fwd and inverse output directories
-    new_dir_suffix = 'R%d' % R_EXT + '_' + 'std_%.1f' % ACT_STDREL + '_thr_%d' % THRTARG
+    # new_dir_suffix = 'R%d' % R_EXT + '_' + 'std_%.1f' % ACT_STDREL + '_thr_%d' % THRTARG
     # offset = len(cp.FWD_OUT_PRFIX)
     FWD_OUT_PRFIX = 'FWD_OUTPUT/'
     FWDOUTPUTDIR = FWD_OUT_PRFIX + new_dir_suffix

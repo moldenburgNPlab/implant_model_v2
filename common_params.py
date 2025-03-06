@@ -112,6 +112,8 @@ elif RE_TEXT == 'RE125':
 elif RE_TEXT == 'RE250':
     if RI_TEXT == 'RI70':
         FIELDTABLE = '02Aug2024_MedResolution_Rext250_Rint70.dat'
+        # FIELDTABLE = '24Jan2025_MedResolution_Rext250_Rint70_volt_diff_100.dat'
+        # FIELDTABLE = '24Jan2025_MedResolution_Rext250_Rint70_volt_diff_300.dat'
     elif RI_TEXT == 'RI250':
         FIELDTABLE = '16June2024_MedResolution_Rext250_Rint250_nonans.dat'
 elif RE_TEXT == 'RE375':
